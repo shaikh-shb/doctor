@@ -8,6 +8,7 @@ import ImageLoader from './ImageLoader';
 import { hasErrorFactory } from '../../../utils/hasError';
 
 import { IPatient } from '../../../interfaces/patient';
+import WritePrescription from './WritePrescription';
 
 const { TextArea } = Input;
 type Props = {
@@ -15,10 +16,14 @@ type Props = {
   onCancel: () => void;
   patient?: IPatient;
   submitText?: string;
+  writePrescription?:boolean;
+
 };
 
 const defaultSubmitText = 'Add patient';
+const prescriptionText = 'Add Prescription';
 const emptyPatient = {
+  password:null,
   name: null,
   address: null,
   status: null,
@@ -29,6 +34,7 @@ const emptyPatient = {
 };
 
 const patientScheme = Yup.object({
+  password: Yup.string().required(),
   name: Yup.string().required(),
   address: Yup.string().required(),
   status: Yup.string().required(),
@@ -42,7 +48,8 @@ const PatientForm = ({
   submitText = defaultSubmitText,
   patient = emptyPatient,
   onSubmit,
-  onCancel
+  onCancel,
+  writePrescription
 }: Props) => {
   const {
     setFieldTouched,
@@ -82,7 +89,7 @@ const PatientForm = ({
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <div className='form-group'>
+          <div className='form-group'>
           <ImageLoader onLoad={handleImageLoad} src={values.img as string} />
         </div>
 
@@ -100,7 +107,7 @@ const PatientForm = ({
 
         <div className='form-group'>
           <Input
-            placeholder='Phone'
+            placeholder='CNIC'
             name='number'
             type='phone'
             onBlur={handleBlur}
@@ -142,6 +149,18 @@ const PatientForm = ({
         </div>
 
         <div className='form-group'>
+          <Input
+            placeholder='Password'
+            name='password'
+            type='password'
+            onBlur={handleBlur}
+            onChange={handleChange}
+            defaultValue={values.name}
+            className={hasError('name')}
+          />
+        </div>
+
+        <div className='form-group'>
           <Select
             placeholder='Status'
             defaultValue={values.status}
@@ -158,7 +177,7 @@ const PatientForm = ({
           <TextArea
             rows={3}
             name='address'
-            placeholder='Address'
+            placeholder={writePrescription? 'Prescription':'Address'}
             onBlur={handleBlur}
             onChange={handleChange}
             defaultValue={values.address}
@@ -172,7 +191,7 @@ const PatientForm = ({
           </Button>
 
           <Button disabled={!isValid} type='primary' htmlType='submit'>
-            {submitText}
+            { writePrescription? prescriptionText: submitText}
           </Button>
         </div>
       </form>

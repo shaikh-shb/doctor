@@ -35,7 +35,7 @@ const WritePrescription = () => {
                 destroyOnClose
                 title={<h3 className='title'>Write Prescription</h3>}
             >
-                <PatientForm onCancel={closeModal} onSubmit={handleAddPatient} />
+                <PatientForm writePrescription={true} onCancel={closeModal} onSubmit={handleAddPatient} />
             </Modal>
         </div>
     );
